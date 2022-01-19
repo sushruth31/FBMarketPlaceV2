@@ -1,5 +1,11 @@
-// Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import checkAuth from "./checkAuth";
 
-export default function handler(req, res) {
-  res.status(200).json({ name: 'John Doe' })
-}
+export default async (req, res) => {
+  const session = await checkAuth(req);
+
+  if (!session) {
+    return res.status(402);
+  }
+
+  res.json(session);
+};
