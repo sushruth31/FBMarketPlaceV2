@@ -19,15 +19,17 @@ export default function Create() {
     setTextColors(newObj);
   }, [formState]);
 
-  useEffect(() => {
-    setTimeout(() => {
-      const state = { ...textColors };
-      for (const key in state) {
-        state[key] = "black";
-      }
-      setTextColors(state);
-    }, 600);
-  }, [formState]);
+  useEffect(
+    () =>
+      setTimeout(() => {
+        const state = { ...textColors };
+        for (const key in state) {
+          state[key] = "black";
+        }
+        setTextColors(state);
+      }, 600),
+    [formState]
+  );
 
   const getColor = key => {
     return !formState[key]?.[0]
@@ -48,9 +50,33 @@ export default function Create() {
             <div>Your Listing Preview</div>
           </div>
           <div className="flex flex-col w-11/12 border-1 border-gray-700 rounded-lg bg-white p-[10px] h-full">
-            <div className="flex flex-col h-2/6 justify-around -mt-[30px]">
-              <div className={getColor("title")}>{formState?.title?.[0] || "Title"}</div>
-              <div className={getColor("price")}>{formState?.price?.[0] || "Price"}</div>
+            <div className="flex flex-col h-full justify-around -mt-[30px]">
+              <div>
+                <div>Title</div>
+                <div className={getColor("title")}>{formState?.title?.[0] || "Enter Title"}</div>
+              </div>
+              <div>
+                <div>Price</div>
+                <div className={getColor("price")}>
+                  {!formState?.price?.[0] ? "Enter Price" : `$${formState?.price?.[0]}`}
+                </div>
+              </div>
+              <div>
+                <div>Category</div>
+                <div className={getColor("category")}>{formState?.category?.[0] || "Select Category"}</div>
+              </div>
+              <div>
+                <div>Condition</div>
+                <div className={getColor("condition")}>{formState?.condition?.[0] || "Select Condition"}</div>
+              </div>
+              <div>
+                <div>Description</div>
+                <div className={getColor("description")}>{formState?.description?.[0] || "Enter a description"}</div>
+              </div>
+              <div>
+                <div>Tags</div>
+                <div>{JSON.stringify(formState.tags) || "Enter some tags"}</div>
+              </div>
             </div>
           </div>
         </div>

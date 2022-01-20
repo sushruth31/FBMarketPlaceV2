@@ -1,11 +1,14 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useRef } from "react";
+import { useRef, useState } from "react";
 import { MdNavigateBefore, MdAddAPhoto } from "react-icons/md";
 import { useRecoilState } from "recoil";
 import { newListingState } from "../atoms/modalAtom";
 import Button from "./navbarbutton";
+import Select from "react-select";
+import DropDown from "./dropdown";
+import TagsInput from "./tagsinput";
 
 export default function CreateNavBar() {
   const session = useSession();
@@ -26,8 +29,28 @@ export default function CreateNavBar() {
     });
   };
 
+  const handleFormChangeDropDown = (name, newval) => {
+    setFormState(prevstate => {
+      const origState = { ...prevstate };
+
+      for (const [key, value] of Object.entries(origState)) {
+        if (key !== newval) {
+          origState[key] = [value[0], false];
+        }
+      }
+      return { ...origState, [name]: [newval, true] };
+    });
+  };
+
+  const conditionOptions = [
+    { value: "new", label: "New" },
+    { value: "usedlikenew", label: "Used - Like New" },
+    { value: "usedgood", label: "Used - Good" },
+    { value: "poor", label: "Poor" },
+  ].sort(({ value: a }, { value: b }) => (a < b ? -1 : 1));
+
   return (
-    <>
+    <div className="overflow-scroll h-5/6">
       <div className="flex items-center justify-between px-[7px] mb-[20px]">
         <div className="flex">
           <MdNavigateBefore onClick={() => router.push("/home")} className="text-3xl cursor-pointer" />
@@ -73,12 +96,33 @@ export default function CreateNavBar() {
           placeholder="Title"
         />
         <input
+          type={"number"}
           value={formState.price?.[0]}
           onChange={handleFormChange}
           name="price"
-          className="form-control mb-[10px]"
+          className="form-control mb-[20px]"
           placeholder="Price"
         />
+
+        <DropDown handleFormChangeDropDown={handleFormChangeDropDown} />
+
+        <Select
+          placeholder="Condition"
+          onChange={({ label }) => handleFormChangeDropDown("condition", label)}
+          options={conditionOptions}
+          className="mb-[20px]"
+        />
+
+        <textarea
+          type={"text"}
+          value={formState.description?.[0]}
+          onChange={handleFormChange}
+          name="description"
+          className="form-control mb-[20px] h-[130px]  "
+          placeholder="Item Description"
+        />
+
+        <TagsInput />
 
         <div className="absolute w-full bottom-[50px] left-0 border-t-2 border-gray-300 py-[20px]">
           <Button
@@ -92,6 +136,6 @@ export default function CreateNavBar() {
           </Button>
         </div>
       </div>
-    </>
+    </div>
   );
 }
