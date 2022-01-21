@@ -75,7 +75,19 @@ export default function Create() {
               </div>
               <div>
                 <div>Tags</div>
-                <div>{JSON.stringify(formState.tags) || "Enter some tags"}</div>
+                {formState.tags?.length === 0 ? (
+                  "Enter some tags"
+                ) : (
+                  <div className="grid grid-cols-3 mr-[100px] w-11/12">
+                    {formState.tags?.map(tag => (
+                      <li
+                        className="bg-gray-300 rounded-2xl p-[7px] flex items-center justify-between mb-[10px] mr-[5px]"
+                        key={tag}>
+                        {tag}
+                      </li>
+                    ))}
+                  </div>
+                )}
               </div>
             </div>
           </div>

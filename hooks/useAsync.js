@@ -9,7 +9,7 @@ export default function useAsync(cb, dependencies = []) {
     cb()
       .then(res => setData(res))
       .catch(err => setErr(err))
-      .finally(setLoading(true));
+      .finally(setLoading(false));
   });
 
   useEffect(() => {
