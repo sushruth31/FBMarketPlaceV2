@@ -7,12 +7,4 @@ export async function middleware(req, ev) {
   if (pathname === "/") {
     return NextResponse.redirect("/login");
   }
-
-  if (pathname.includes("api") && !pathname.includes("auth")) {
-    const session = await checkAuth(req);
-
-    if (!session) return NextResponse.redirect("/login");
-
-    return NextResponse.next();
-  }
 }

@@ -9,8 +9,6 @@ import Button from "./navbarbutton";
 import Select from "react-select";
 import DropDown from "./dropdown";
 import TagsInput from "./tagsinput";
-import useFetch from "../hooks/useFetch";
-import { useEffect } from "react/cjs/react.development";
 import CitiesDropDown from "./citiesdropdown";
 
 export default function CreateNavBar() {
@@ -18,9 +16,6 @@ export default function CreateNavBar() {
   const router = useRouter();
   const hiddenInputRef = useRef();
   const [formState, setFormState] = useRecoilState(newListingState);
-  const [cities, loading, err] = useFetch("https://countriesnow.space/api/v0.1/countries");
-
-  useEffect(() => console.log(cities), [cities]);
 
   const handleFormChange = ({ target }) => {
     setFormState(prevstate => {
@@ -57,11 +52,7 @@ export default function CreateNavBar() {
 
   return (
     <div className="overflow-scroll h-5/6">
-      {loading ? (
-        <div>Loading</div>
-      ) : err ? (
-        <div>There was an error loading</div>
-      ) : (
+      {
         <>
           <div className="flex items-center justify-between px-[7px] mb-[20px]">
             <div className="flex">
@@ -136,7 +127,7 @@ export default function CreateNavBar() {
 
             <TagsInput />
 
-            <CitiesDropDown data={cities.data} />
+            <CitiesDropDown />
 
             <div className="absolute w-full bottom-[50px] left-0 border-t-2 border-gray-300 py-[20px]">
               <Button
@@ -151,7 +142,7 @@ export default function CreateNavBar() {
             </div>
           </div>
         </>
-      )}
+      }
     </div>
   );
 }
