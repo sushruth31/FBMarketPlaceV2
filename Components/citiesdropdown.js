@@ -1,7 +1,9 @@
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import axios from "axios";
 import useSWR from "swr";
 import useDebounce from "../hooks/useDebounce";
+import { useRecoilState } from "recoil";
+import { newListingState } from "../atoms/modalAtom";
 
 export default function CitiesDropDown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,6 +11,7 @@ export default function CitiesDropDown() {
   const scrollRef = useRef();
   const [debouncedInput] = useDebounce(input, 250);
   const fetcher = url => axios.get(url).then(res => res.data);
+  const [formState, setFormState] = useRecoilState(newListingState);
 
   function CityList() {
     const { data, error } = useSWR(
@@ -31,7 +34,6 @@ export default function CitiesDropDown() {
                 <li
                   onClick={() => {
                     setInput(city);
-                    setIsOpen(false);
                   }}
                   ref={node => node?.scrollIntoView({ behavior: "smooth" })}
                   key={city}
@@ -45,6 +47,10 @@ export default function CitiesDropDown() {
                   onClick={() => {
                     setInput(city);
                     setIsOpen(false);
+                    setFormState(prevState => ({
+                      ...prevState,
+                      city: [input, true],
+                    }));
                   }}
                   key={city}
                   className={className}>
@@ -58,15 +64,12 @@ export default function CitiesDropDown() {
     );
   }
 
-  useEffect(() => {
-    input.length > 0 ? setIsOpen(true) : setIsOpen(false);
-  }, [input]);
-
   return (
     <>
       <input
         onChange={({ target: { value } }) => {
           setInput(value);
+          if (value.length > 2) setIsOpen(true);
           scrollRef?.current?.scrollIntoView({ behavior: "smooth" });
         }}
         className="form-control"

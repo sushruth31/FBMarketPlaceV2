@@ -6,26 +6,42 @@ import { newListingState } from "../atoms/modalAtom";
 export default function TagsInput() {
   const [tags, setTags] = useState([]);
   const [input, setInput] = useState("");
+  const [maxTagsReached, setMaxTagsReached] = useState(false);
 
   const [_, setFormState] = useRecoilState(newListingState);
 
   useEffect(() => {
-    if (tags.length > 0) {
+    if (maxTagsReached) setMaxTagsReached(false);
+
+    if (tags.length === 0) {
       setFormState(prevstate => ({
         ...prevstate,
-        tags: tags,
+        tags: [[], false],
       }));
+
+      return;
     }
+
+    setFormState(prevstate => ({
+      ...prevstate,
+      tags: [[...tags], true],
+    }));
   }, [tags]);
 
   useEffect(() => {
     if (input === "" || input.length < 2) return;
     const onCommaPress = ({ keyCode }) => {
-      if (keyCode !== 44) return;
-      let tagToAdd = input.length > 7 ? input.slice(0, 4) + "..." : input;
-      tagToAdd = tagToAdd.replace(",", "").trim();
-      setTags(prevstate => Array.from(new Set([...prevstate, tagToAdd])));
-      setInput("");
+      if (keyCode === 44) {
+        if (tags?.length === 6) {
+          setMaxTagsReached(true);
+          setInput("");
+          return;
+        }
+        let tagToAdd = input.length > 7 ? input.slice(0, 4) + "..." : input;
+        tagToAdd = tagToAdd.replace(",", "").trim();
+        setTags(prevstate => Array.from(new Set([...prevstate, tagToAdd])));
+        setInput("");
+      }
     };
 
     window.addEventListener("keypress", onCommaPress);
@@ -50,6 +66,7 @@ export default function TagsInput() {
             </li>
           ))}
       </div>
+      {maxTagsReached && <div>Max tags reached!</div>}
       <input
         placeholder="Enter Tags"
         className="form-control mb-[30px]"

@@ -1,7 +1,6 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { useRef, useState } from "react";
 import { MdNavigateBefore, MdAddAPhoto } from "react-icons/md";
 import { useRecoilState } from "recoil";
 import { newListingState } from "../atoms/modalAtom";
@@ -10,11 +9,11 @@ import Select from "react-select";
 import DropDown from "./dropdown";
 import TagsInput from "./tagsinput";
 import CitiesDropDown from "./citiesdropdown";
+import ImgUploader from "./imguploader";
 
 export default function CreateNavBar() {
   const session = useSession();
   const router = useRouter();
-  const hiddenInputRef = useRef();
   const [formState, setFormState] = useRecoilState(newListingState);
 
   const handleFormChange = ({ target }) => {
@@ -22,7 +21,7 @@ export default function CreateNavBar() {
       const origState = { ...prevstate };
 
       for (const [key, value] of Object.entries(origState)) {
-        if (key !== target.name) {
+        if (key !== target.name && value?.length > 0) {
           origState[key] = [value[0], false];
         }
       }
@@ -36,7 +35,7 @@ export default function CreateNavBar() {
 
       for (const [key, value] of Object.entries(origState)) {
         if (key !== newval) {
-          origState[key] = [value[0], false];
+          origState[key] = [value?.[0], false];
         }
       }
       return { ...origState, [name]: [newval, true] };
@@ -80,15 +79,7 @@ export default function CreateNavBar() {
             </div>
           </div>
 
-          <div onClick={() => hiddenInputRef?.current.click()} className="cursor-pointer mb-[30px]">
-            <div className="mb-[20px]">{`Photos 0/10 - You can add up to 5 photos `}</div>
-            <div className="flex justify-center">
-              <div className="w-10/12 h-[150px] border-gray-700 border-1 rounded flex items-center justify-center">
-                <MdAddAPhoto className="text-3xl" />
-              </div>
-            </div>
-            <input type={"file"} ref={hiddenInputRef} className="hidden" />
-          </div>
+          <ImgUploader />
 
           <div>
             <input

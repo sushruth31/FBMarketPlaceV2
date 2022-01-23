@@ -19,17 +19,16 @@ export default function Create() {
     setTextColors(newObj);
   }, [formState]);
 
-  useEffect(
-    () =>
-      setTimeout(() => {
-        const state = { ...textColors };
-        for (const key in state) {
-          state[key] = "black";
-        }
-        setTextColors(state);
-      }, 600),
-    [formState]
-  );
+  useEffect(() => {
+    const id = setTimeout(() => {
+      const state = { ...textColors };
+      for (const key in state) {
+        state[key] = "black";
+      }
+      setTextColors(state);
+    }, 600);
+    return () => clearTimeout(id);
+  }, [formState]);
 
   const getColor = key => {
     return !formState[key]?.[0]
@@ -50,7 +49,7 @@ export default function Create() {
             <div>Your Listing Preview</div>
           </div>
           <div className="flex flex-col w-11/12 border-1 border-gray-700 rounded-lg bg-white p-[10px] h-full">
-            <div className="flex flex-col h-full justify-around -mt-[30px]">
+            <div className="flex flex-col h-[120%] justify-around -mt-[30px]">
               <div>
                 <div>Title</div>
                 <div className={getColor("title")}>{formState?.title?.[0] || "Enter Title"}</div>
@@ -75,11 +74,11 @@ export default function Create() {
               </div>
               <div>
                 <div>Tags</div>
-                {formState.tags?.length === 0 ? (
-                  "Enter some tags"
+                {formState.tags?.[0]?.length === 0 ? (
+                  <div>Enter some tags</div>
                 ) : (
                   <div className="grid grid-cols-3 mr-[100px] w-11/12">
-                    {formState.tags?.map(tag => (
+                    {formState.tags?.[0]?.map(tag => (
                       <li
                         className="bg-gray-300 rounded-2xl p-[7px] flex items-center justify-between mb-[10px] mr-[5px]"
                         key={tag}>
@@ -88,6 +87,10 @@ export default function Create() {
                     ))}
                   </div>
                 )}
+              </div>
+              <div>
+                <div>City</div>
+                <div className={getColor("city")}>{formState?.city?.[0] || "Select a city"}</div>
               </div>
             </div>
           </div>
