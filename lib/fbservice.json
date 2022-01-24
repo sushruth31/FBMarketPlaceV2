@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "fbmarketplace-ff4fb",
+  "private_key_id": "fb56f3841592a4d518adbe88772c89ed8f9adc32",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQCqAg1hLuMRV9ww\nxu/jq0xgMIO7m6AiUf5UVq8ALOGxnNz7Z5B13NlxuCLtegMq9T7L385+blVZbVMa\nENbnwdPWH2dJg4IAj1UrNkKd7NZcDh9m6vYuoqFeRGU9j9EvmSPxddGIg6J5wfx6\nR9mx+itKHsbDjw7YrOrQAhuPWqdT6batPo6nwCaM+ZqzLFt6JGlst1PH4oMTD8/8\n9fXouotJC+xLzuQwNBx3AyNsiFVPBlcdG7jjT1NG5kruJ/Pitqqq+TByit01Fq+1\n56xrtsK4O74nms6pwtRNueLt2+t6DEj/fm+y3dtXJqWhWWaQh0fAtI5cmXuhAr2g\nBh6Suf0zAgMBAAECggEADUdxwhiGdfFV6p1vWWok4hKIB5xlSqj6452Nt8bJrjTh\nceWp+/rPJTnLyJ7SJoXXbNdDas61bfHDHvMXxix2nm//gld6TQ7lCSYI2AsKx0/3\nFfPeXNApKJLREZjtLvmYPCEGx9H4W+hSDz8TevpebUCwJ9BByZzgDnVLr8vV7BDh\ns54pPtX0k9FQj85I+shR71pefxQvl1updxxa1F4o+fyZ029zKIQBETT/MAZ866KH\nuZITh3dU/RboQrGXtAZIaT+BTxiuU3fuKzYenbhsknbShVvTt+Tr43oDCpjnV+xq\nUxB52YrL0ab6SgsBblXRG4PqaoWF7dur74J65niViQKBgQDR+kaJgwXQs0WBdDYm\neL7ThZ4P6VE4Ch1ALX2Df+asZyjX38HsaoQXQT4BQFPsuHF7Iqv3dICtdxVoNv7o\nbq/IXb+wLHmplUI/OImOKsIOxgTyUU9GvCNR5aTugR1eV9gInj21q8tCsulBA9rh\nmPRopbjETHRF7/6p7+/jjvPV5wKBgQDPRRqvBtyr4OkKPKtAzev51q4m12HM4hPG\n7rxQKqp+zmeD147QRCd26/PSp/HywlFHMbUQa9BGeNqrhk7h3T+F9QL2aqzCy3m9\nZcxyxzrm6WSBg3YirCDYdBbUSb2BCjYjs0dh3AgtGR9wqqHNdtYP/5O48BeVpCIk\nodAyQ/Zc1QKBgQDDoIsLHpjSYdNF0oGIwkH3S6uBY3yZ20J5QmiHlSfSQ6IXzY4c\ntvgtukkMXWRTTVvcvua8ezxPYHz/RQ2ke0smP8GRXz5SMo8v23q8izWVEgQVxo83\ndZzqdit9UamM9gZ9sQAJO+75Szppqi/IsvoybQOBT0GczwXSSYqT1eFyzQKBgHrG\nEDxE8EnPe7rYnQhR8cmX5KiVRBU8hUJ8/4bs/vkGAkMSWEH9XPMQaOkLGkIV4Fcv\nlnUXp9NWmxCnCeq4R3xt2UdlgNgR9xa9ShFi+fz1mtcsq7l2BC6y9SLiWyIojlEv\nTMUmtKEiFIGEUTuHfN0VIseVUCMPijnwr4ZWw4PRAoGAdqN6kXB011haMv0KgC5J\nIKz0un9jD0HlI3AN13U79Ec3JnaDruGRe9wpcy7CwfZIBPSk47TIG/mcezIRYKAI\nd1nE9xQnpSvJOT+c4l+VG5ip5PGmv+wnBh0mqH0YF9ynf9Ya5RMlvQertXwEsRL3\nPpiD4o57qbjx/MdcG1nqylI=\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-p11e5@fbmarketplace-ff4fb.iam.gserviceaccount.com",
+  "client_id": "102206749328669903396",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-p11e5%40fbmarketplace-ff4fb.iam.gserviceaccount.com"
+}
