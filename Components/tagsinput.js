@@ -13,6 +13,16 @@ export default function TagsInput() {
   useEffect(() => {
     if (maxTagsReached) setMaxTagsReached(false);
 
+    setFormState(prevstate => {
+      const origState = { ...prevstate };
+
+      for (const [key, value] of Object.entries(origState)) {
+        origState[key] = [value?.[0], false];
+      }
+
+      return origState;
+    });
+
     if (tags.length === 0) {
       setFormState(prevstate => ({
         ...prevstate,

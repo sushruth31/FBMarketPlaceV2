@@ -10,7 +10,6 @@ export default function Create() {
 
   useEffect(() => {
     const newObj = {};
-    setTextColors;
 
     for (const [key, value] of Object.entries(formState)) {
       newObj[key] = value?.[1] ? "blue" : "black";

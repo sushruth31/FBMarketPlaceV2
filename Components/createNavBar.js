@@ -10,6 +10,7 @@ import DropDown from "./dropdown";
 import TagsInput from "./tagsinput";
 import CitiesDropDown from "./citiesdropdown";
 import ImgUploader from "./imguploader";
+import axios from "axios";
 
 export default function CreateNavBar() {
   const session = useSession();
@@ -48,6 +49,34 @@ export default function CreateNavBar() {
     { value: "usedgood", label: "Used - Good" },
     { value: "poor", label: "Poor" },
   ].sort(({ value: a }, { value: b }) => (a < b ? -1 : 1));
+
+  const submitForm = async () => {
+    let finalFormState = {};
+    ("data:image/jpeg;base64,");
+    for (const [k, v] of Object.entries(formState)) {
+      if (k === "imgs") {
+        finalFormState[k] = v[0].map(imgstr =>
+          String(imgstr).includes("jpeg")
+            ? String(imgstr).replace("data:image/jpeg;base64,", "")
+            : String(imgstr).replace("data:image/png;base64,", "")
+        );
+      } else if (k === "price") {
+        finalFormState[k] = Number(v);
+      } else {
+        finalFormState[k] = v[0];
+      }
+    }
+
+    finalFormState = { ...finalFormState, uid: session.data.user.uid };
+
+    const res = await axios.request({
+      method: "POST",
+      url: "/api/savelisting",
+      data: finalFormState,
+    });
+
+    console.log(res);
+  };
 
   return (
     <div className="overflow-scroll h-5/6">
@@ -121,13 +150,7 @@ export default function CreateNavBar() {
             <CitiesDropDown />
 
             <div className="absolute w-full bottom-[50px] left-0 border-t-2 border-gray-300 py-[20px]">
-              <Button
-                disabled={
-                  Object.values(formState).map(v => v?.[0]).length < 6 ||
-                  Object.values(formState)
-                    .map(v => v?.[0])
-                    .some(el => el?.length === 0)
-                }>
+              <Button onClick={submitForm} disabled={!Object.values(formState).every(([val]) => val.length > 0)}>
                 Next
               </Button>
             </div>

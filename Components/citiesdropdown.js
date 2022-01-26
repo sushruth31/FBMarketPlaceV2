@@ -4,6 +4,7 @@ import useSWR from "swr";
 import useDebounce from "../hooks/useDebounce";
 import { useRecoilState } from "recoil";
 import { newListingState } from "../atoms/modalAtom";
+import { useEffect } from "react/cjs/react.development";
 
 export default function CitiesDropDown() {
   const [isOpen, setIsOpen] = useState(false);
@@ -11,13 +12,44 @@ export default function CitiesDropDown() {
   const scrollRef = useRef();
   const [debouncedInput] = useDebounce(input, 250);
   const fetcher = url => axios.get(url).then(res => res.data);
-  const [formState, setFormState] = useRecoilState(newListingState);
+  const [_, setFormState] = useRecoilState(newListingState);
 
   function CityList() {
     const { data, error } = useSWR(
       () => (debouncedInput && debouncedInput.length > 2 ? `/api/cities?query=${debouncedInput}` : null),
       fetcher
     );
+
+    const selectCity = city => {
+      setInput(city);
+      setIsOpen(false);
+
+      setFormState(prevstate => {
+        const origState = { ...prevstate };
+
+        for (const [key, value] of Object.entries(origState)) {
+          origState[key] = [value?.[0], false];
+        }
+
+        return origState;
+      });
+
+      setFormState(prevState => ({
+        ...prevState,
+        city: [city, true],
+      }));
+    };
+
+    useEffect(() => {
+      const handler = ({ keyCode }) => {
+        if (keyCode !== 13 || data.length > 1) return;
+        const city = data[0];
+        selectCity(city);
+      };
+
+      window.addEventListener("keypress", handler);
+      return () => window.removeEventListener("keypress", handler);
+    }, [data]);
 
     const className = "list-group py-[5px] cursor-pointer hover:bg-slate-100";
 
@@ -43,17 +75,7 @@ export default function CitiesDropDown() {
               );
             } else {
               return (
-                <li
-                  onClick={() => {
-                    setInput(city);
-                    setIsOpen(false);
-                    setFormState(prevState => ({
-                      ...prevState,
-                      city: [input, true],
-                    }));
-                  }}
-                  key={city}
-                  className={className}>
+                <li onClick={() => selectCity(city)} key={city} className={className}>
                   {city}
                 </li>
               );

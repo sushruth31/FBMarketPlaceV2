@@ -2,20 +2,44 @@ import { useRef, useState } from "react";
 import { MdAddAPhoto } from "react-icons/md";
 import { useEffect } from "react/cjs/react.development";
 import Image from "next/image";
+import { useRecoilState } from "recoil";
+import { newListingState } from "../atoms/modalAtom";
 
 export default function ImgUploader() {
   const hiddenInputRef = useRef();
   const [imgs, setImgs] = useState([]);
+  const [formstate, setFormState] = useRecoilState(newListingState);
 
-  useEffect(() => console.log(imgs));
+  useEffect(() => {
+    if (imgs.length === 0) return;
+
+    setFormState(prevstate => {
+      const origState = { ...prevstate };
+
+      for (const [key, value] of Object.entries(origState)) {
+        origState[key] = [value?.[0], false];
+      }
+
+      return origState;
+    });
+    setFormState(prevState => ({
+      ...prevState,
+      imgs: [[...imgs], true],
+    }));
+  }, [imgs]);
 
   const handleFileUpload = ({ target: { files } }) => {
     if (files?.length === 0) return;
 
     for (const file of files) {
-      setImgs(prevState => {
-        return [file, ...prevState];
-      });
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+
+      reader.onload = readerEvent => {
+        setImgs(prevState => {
+          return [readerEvent.target.result, ...prevState];
+        });
+      };
     }
   };
 
@@ -25,11 +49,11 @@ export default function ImgUploader() {
         <ul className="grid grid-cols-3 w-full -ml-[30px]">
           {imgs.map(file => (
             <Image
-              key={file.name}
+              key={file}
               className="rounded mr-[40px] mb-[20px] cursor-pointer"
               width={100}
               height={100}
-              src={URL.createObjectURL(file)}
+              src={file}
               onClick={() => setImgs(prevState => prevState.filter(exfile => exfile !== file))}
             />
           ))}
