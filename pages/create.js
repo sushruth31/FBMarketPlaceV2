@@ -3,10 +3,13 @@ import CustomHead from "../Components/head";
 import ProtectedPage from "../Components/protectedpage";
 import { useRecoilState } from "recoil";
 import { newListingState } from "../atoms/modalAtom";
+import Image from "next/image";
+import { BiChevronLeftCircle, BiChevronRightCircle } from "react-icons/bi";
 
 export default function Create() {
   const [formState, setFormState] = useRecoilState(newListingState);
   const [textColors, setTextColors] = useState({});
+  const [imgIdx, setImgIdx] = useState(0);
 
   useEffect(() => {
     const newObj = {};
@@ -37,6 +40,30 @@ export default function Create() {
       : "text-gray-700 text-xl font-bold";
   };
 
+  const rotateImgIdx = direction => {
+    switch (direction) {
+      case "increase":
+        setImgIdx(prevState => {
+          if (formState.imgs[0]?.[prevState + 1]) {
+            return prevState + 1;
+          } else {
+            return 0;
+          }
+        });
+        break;
+      case "decrease":
+        setImgIdx(prevState => {
+          if (formState.imgs[0]?.[prevState - 1]) {
+            return prevState - 1;
+          } else {
+            const maxIdx = formState.imgs[0].length - 1;
+            return maxIdx;
+          }
+        });
+        break;
+    }
+  };
+
   return (
     <ProtectedPage>
       <CustomHead title="Home" />
@@ -44,9 +71,21 @@ export default function Create() {
       <div className="w-11/12 max-w-[1100px] rounded-lg shadow-lg h-[700px] mt-[20px] bg-white flex flex-col p-[25px]">
         <div className="font-bold">Preview</div>
         <div className="flex justify-center">
-          <div className="flex w-11/12 bg-gray-200 h-[600px] justify-center items-center">
-            <div>Your Listing Preview</div>
-          </div>
+          {formState?.imgs?.[0]?.length > 0 ? (
+            <div className="flex w-11/12 bg-gray-200 h-[600px] justify-center items-center">
+              {formState?.imgs?.[0]?.length > 1 && (
+                <BiChevronLeftCircle onClick={() => rotateImgIdx("decrease")} className="text-3xl cursor-pointer" />
+              )}
+              <Image className="rounded" height={400} width={400} src={formState.imgs[0][imgIdx]} />
+              {formState?.imgs?.[0]?.length > 1 && (
+                <BiChevronRightCircle onClick={() => rotateImgIdx("increase")} className="text-3xl cursor-pointer" />
+              )}
+            </div>
+          ) : (
+            <div className="flex w-11/12 bg-gray-200 h-[600px] justify-center items-center">
+              <div>Your listing preview</div>
+            </div>
+          )}
           <div className="flex flex-col w-11/12 border-1 border-gray-700 rounded-lg bg-white p-[10px] h-full">
             <div className="flex flex-col h-[120%] justify-around -mt-[30px]">
               <div>

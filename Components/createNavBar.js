@@ -1,7 +1,7 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useRouter } from "next/router";
-import { MdNavigateBefore, MdAddAPhoto } from "react-icons/md";
+import { MdNavigateBefore } from "react-icons/md";
 import { useRecoilState } from "recoil";
 import { newListingState } from "../atoms/modalAtom";
 import Button from "./navbarbutton";
@@ -52,7 +52,6 @@ export default function CreateNavBar() {
 
   const submitForm = async () => {
     let finalFormState = {};
-    ("data:image/jpeg;base64,");
     for (const [k, v] of Object.entries(formState)) {
       if (k === "imgs") {
         finalFormState[k] = v[0].map(imgstr =>
@@ -61,13 +60,14 @@ export default function CreateNavBar() {
             : String(imgstr).replace("data:image/png;base64,", "")
         );
       } else if (k === "price") {
-        finalFormState[k] = Number(v);
+        finalFormState[k] = Number(v[0]);
       } else {
         finalFormState[k] = v[0];
       }
     }
 
     finalFormState = { ...finalFormState, uid: session.data.user.uid };
+    console.log(finalFormState);
 
     const res = await axios.request({
       method: "POST",
@@ -150,7 +150,9 @@ export default function CreateNavBar() {
             <CitiesDropDown />
 
             <div className="absolute w-full bottom-[50px] left-0 border-t-2 border-gray-300 py-[20px]">
-              <Button onClick={submitForm} disabled={!Object.values(formState).every(([val]) => val.length > 0)}>
+              <Button
+                onClick={submitForm}
+                disabled={Object.keys(formState).length < 8 || !Object.values(formState).every(([val]) => val.length > 0)}>
                 Next
               </Button>
             </div>

@@ -4,6 +4,7 @@ import { useEffect } from "react/cjs/react.development";
 import Image from "next/image";
 import { useRecoilState } from "recoil";
 import { newListingState } from "../atoms/modalAtom";
+import deepCopy from "../functions/deepCopy";
 
 export default function ImgUploader() {
   const hiddenInputRef = useRef();
@@ -11,7 +12,20 @@ export default function ImgUploader() {
   const [formstate, setFormState] = useRecoilState(newListingState);
 
   useEffect(() => {
-    if (imgs.length === 0) return;
+    if (imgs.length === 0) {
+      //remove the imgs property from formstate
+      setFormState(prevState => {
+        const origState = deepCopy(prevState);
+        const newObj = {};
+        for (const key in origState) {
+          if (key !== "imgs") {
+            newObj[key] = origState[key];
+          }
+        }
+        return newObj;
+      });
+      return;
+    }
 
     setFormState(prevstate => {
       const origState = { ...prevstate };
@@ -45,6 +59,7 @@ export default function ImgUploader() {
 
   return (
     <>
+      <div className="mb-[20px]">{`Photos ${imgs.length || 0}/5 - You can add up to 5 photos `}</div>
       {imgs.length > 0 ? (
         <ul className="grid grid-cols-3 w-full -ml-[30px]">
           {imgs.map(file => (
@@ -66,7 +81,6 @@ export default function ImgUploader() {
       ) : (
         <>
           <div onClick={() => hiddenInputRef?.current.click()} className="cursor-pointer mb-[30px]">
-            <div className="mb-[20px]">{`Photos 0/10 - You can add up to 5 photos `}</div>
             <div className="flex justify-center">
               <div className="w-10/12 h-[150px] border-gray-700 border-1 rounded flex items-center justify-center">
                 <MdAddAPhoto className="text-3xl" />
